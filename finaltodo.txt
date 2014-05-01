@@ -1,0 +1,28 @@
+-sensor graphic
+-randomness added, already staged 			--done
+	-do we want normal dist? - yes			--done
+-generalize java side
+	-file paths
+	-background
+-work on visual appeal
+--sensor distance --done
+-comment code
+-tie up end conditions
+-configureable time							--done
+
+talk aobut:
+-normal dist								--done
+
+--have an end simultion command by them.
+--menu bar
+--continuosuly displaying status string --test if its a string
+
+-map position editior
+
+--location setting
+
+(have default or specify by command line)
+Script config file to specify:
+-energy -done
+-sigmas for dist -done
+-costs to turn, move, and sense -done
