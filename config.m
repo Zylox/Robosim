@@ -15,6 +15,6 @@ mu.turningSensorMu = 0;
 mu.sensingMu = 0;
 
 time = 0;
-timeStep = 5;
+timeStep = 100;
 botRadius = 20;
 defaultCommandLineArgs = "heloo world";

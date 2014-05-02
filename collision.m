@@ -1,17 +1,19 @@
-function collide = circleMapCollision(x,y,radius)
+function [collide, nearest] = circleMapCollision(x,y,radius)
 	%(x-a)^2 + (y-b)^2 - r^2 = 0
 	%printf("%d %d %d\n", x,y, radius);
 	
 	global map;
+	nearest = [-1,-1, Inf];
 	if(floor(x)-radius <=0 || floor(x)+radius > rows(map.map)+0 || floor(y)-radius <=0 || floor(y)+radius > columns(map.map)+0)
 		collide = 1;
 		
-		debugDisp("corners info")
-		debugDisp(ceil(y)+radius)
-		debugDisp(columns(map.map))
-		debugDisp(ceil(x)+radius)
-		debugDisp(rows(map.map))
-		
+		% debugDisp("corners info")
+		% debugDisp(ceil(y)+radius)
+		% debugDisp(columns(map.map))
+		% debugDisp(ceil(x)+radius)
+		% debugDisp(rows(map.map))
+%		debugDisp(cstrcat("x: ",num2str(x)," y: ",num2str(y)));
+
 		return;
 	endif
 
@@ -20,31 +22,35 @@ function collide = circleMapCollision(x,y,radius)
 	
 	checkIt = 0;
 	
-	for(q = 1:4)
-		checkIt += map.miniMap(corners(q,2),corners(q,1));
-	endfor
-	if(checkIt == 0)
-		collide = 0;
-		return;
-	endif
+	% for(q = 1:4)
+		% checkIt += map.miniMap(corners(q,2),corners(q,1));
+	% endfor
+	% if(checkIt == 0)
+		% collide = 0;
+		% return;
+	% endif
 	
 	radiusSq = radius^2;
 	collide = 0;
+	
 
 	for(i = floor(x)-radius:floor(x)+radius)
-		if(i > map.dims(2))
-			collide = 1;
-			return;	
-		endif
+		% if(i > map.dims(2))
+			% collide = 1;
+			% return;	
+		% endif
 		for(j = floor(y)-radius:floor(y)+radius)
-			if(j > map.dims(1))
-					collide = 1;
-					return;
-			endif
+			% if(j > map.dims(1))
+					% collide = 1;
+					% return;
+			% endif
 			if(map.map(i,j) == 1)
 				if(pixelCircleCollision(i,j,x,y,radius))
 					collide = 1;
-					return;
+					checkDist = (x-i)^2 + (y-j)^2;
+					if(checkDist < nearest(3))
+						nearest = [i,j,checkDist];
+					endif
 				endif
 			endif
 		endfor
@@ -52,10 +58,87 @@ function collide = circleMapCollision(x,y,radius)
 	
 endfunction
 
+function angle = angleOfVec(x,y)
+	if(x == 0)
+		if(y > 0)
+			angle = (3*pi)/2;
+		else
+			angle = pi/2;
+		endif
+	else
+		angle = atan(y/x);
+	endif
+endfunction
+
+function vecAdj = rCollPMAmt(pos, nearest, movement, radius)
+	posX = pos(1);
+	posY = pos(2);
+	nearX = nearest(1);
+	nearY = nearest(2);
+	moveX = movement(1);
+	moveY = movement(2);
+	
+		disp("Movex, movey");
+		disp(moveX);
+		disp(moveY);
+		if(moveX < 0)
+			angle = -angleOfVec(moveX,moveY);
+		else
+			angle = angleOfVec(moveX,moveY);
+		endif
+	% disp("moveX, moveY");
+	% disp(moveX);
+	% disp(moveY);
+	
+	% distX = posX-nearX;
+	% distY = posY-nearY;
+	
+	% A = [distX, distY];
+	% B = movement;
+	% normB = norm(B);
+	
+	% (dot(A,B)/norm(B)^2)*B
+	% vecAdj = (normB.*(radius)) - ((dot(A,B)/normB^2)*B);
+	
+	pointOfContact = traceToEdgeOfCirc(nearX,nearY,angle,posX,posY);
+	vecAdj = [nearest(1),nearest(2)] .- pointOfContact;
+	disp("Moved back By");
+	disp(vecAdj);
+	
+endfunction
+
+function point = traceToEdgeOfCirc(x,y,angle,circX,circY)
+	global botRadius;
+	
+	moveDist = .1;
+	
+	dx = cos(angle);
+	dy = sin(angle);
+
+	
+	collide = 1;
+	while (collide == 1)
+		x += moveDist*dx;
+		y += moveDist*dy;
+		% dist += moveDist;
+		%collide = pixelMapCollision(x,y);
+		collide = pixelCircleCollision(x,y, circX, circY, botRadius);
+		disp("tracing");
+		disp(x);
+		disp(y);
+		disp(circX);
+		disp(circY);
+		disp(angle);
+	endwhile
+	point = [x,y];
+	
+	
+endfunction
+
 function collide = pixelMapCollision(x, y)
 
 	global map;
-	if(floor(x) <=0 || floor(x)> rows(map.map) || floor(y) <=0 || floor(y) > columns(map.map))
+	if(floor(x) <=1 || floor(x)> rows(map.map) || floor(y) <=1 || floor(y) > columns(map.map))
 		collide = 1;
 		
 		debugDisp("corners info")

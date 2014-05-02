@@ -15,10 +15,10 @@ function [command, newState] = ngfnbfUpdate(oldState, command)
 	%disp(newState)
 	newState.moveCounter +=1;
 	if(mod(newState.moveCounter,2) == 0)
-		command = "move 1000";
+		command = "move 200";
 		newState.output = "GO GO";
 	else
-		command = "move 10";
+		command = "turn 20";
 		newState.output = "";
 	endif
 	

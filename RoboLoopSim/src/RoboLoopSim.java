@@ -28,7 +28,7 @@ public class RoboLoopSim extends BasicGame {
 	private int counter = 0;
 	private ArrayList<Circle> points;
 	private boolean readFromBotOut = true;
-	
+
 	public RoboLoopSim(String title) {
 		super(title);
 	}
@@ -54,7 +54,7 @@ public class RoboLoopSim extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		// TODO Auto-generated method stub
-		background = new Image("mizzouboogaloo.png");
+
 		stopWatch = 0;
 
 		points = new ArrayList<Circle>();
@@ -85,6 +85,14 @@ public class RoboLoopSim extends BasicGame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String backPic = firstLine;
+
+		try {
+			firstLine = scriptRead.readScriptLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		time = Float.parseFloat(firstLine);
 
 		try {
@@ -94,14 +102,14 @@ public class RoboLoopSim extends BasicGame {
 			e.printStackTrace();
 		}
 		timeStep = Float.parseFloat(firstLine);
-		
+
 		// pasing: name posx posy
 		String[] firstLineParts = parseLine(scriptRead);
 
 		int knownAttributeNum = 6;
 		int i;
 		for (i = 0; i < firstLineParts.length - knownAttributeNum + 1; i += knownAttributeNum) {
-			bots.add(new Robot(firstLineParts[i], i/knownAttributeNum));
+			bots.add(new Robot(firstLineParts[i], i / knownAttributeNum));
 			// System.out.println(firstLineParts[i] + " " + i);
 			bots.get(i / knownAttributeNum).initBody(
 					Integer.parseInt(firstLineParts[i + 1]),
@@ -112,6 +120,7 @@ public class RoboLoopSim extends BasicGame {
 					Float.parseFloat(firstLineParts[i + 5]));
 		}
 
+		background = new Image("res/" + backPic);
 		simulating = true;
 	}
 
@@ -124,7 +133,7 @@ public class RoboLoopSim extends BasicGame {
 		for (Robot b : bots) {
 			b.render(container, g);
 		}
-		//g.fill(new Rectangle(10, 10, 75, 20));
+		// g.fill(new Rectangle(10, 10, 75, 20));
 
 		if (!simulating) {
 			g.setColor(Color.red);
@@ -137,8 +146,9 @@ public class RoboLoopSim extends BasicGame {
 		}
 		g.setColor(Color.green);
 		g.draw(new Point(100, 100));
-		float roundOff = (float) Math.round((time/1000) * 100) / 100;
-		g.drawString(Double.toString(roundOff), container.getWidth()-60, container.getHeight() -20);
+		float roundOff = (float) Math.round((time / 1000) * 100) / 100;
+		g.drawString(Double.toString(roundOff), container.getWidth() - 60,
+				container.getHeight() - 20);
 
 		// for(int i = 50; i<=800;i+=50){
 		// g.setColor(Color.red);
@@ -160,15 +170,15 @@ public class RoboLoopSim extends BasicGame {
 					// executescript
 					String[] lineParts = parseLine(scriptRead);
 
-					if(readFromBotOut){
+					if (readFromBotOut) {
 						String output = getFullLine(botOut);
-						if(output.equals("end")){
+						if (output.equals("end")) {
 							readFromBotOut = false;
-						}else{
+						} else {
 							b.setDisplayString(output);
 						}
 					}
-					
+
 					if (lineParts[0].equals("end")) {
 						simulating = false;
 						return;
@@ -218,7 +228,7 @@ public class RoboLoopSim extends BasicGame {
 		return lineParts;
 	}
 
-	private String getFullLine(ScriptReader reader){
+	private String getFullLine(ScriptReader reader) {
 
 		String line = "";
 		try {

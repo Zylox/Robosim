@@ -14,58 +14,78 @@ function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, recurse)
 	
 	bots = adjEnergy(bots, name, -1*engReq);
 	
+	if(bots.(name).sleep ==1)
+		exitCon = 0;
+		return;
+	endif
 	
 	
 	collided = 0;
 	exitCon = 0;
 
 	bots.(name).pos = bots.(name).pos + [x,y];
-	%do
-		collided = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius);
-		for(j = 1:nfields(bots))
-			if(j != i)
-				collided += circleCircleCollision(bots.(names{i}).pos(1), bots.(names{i}).pos(2),bots.(names{j}).pos(1), bots.(names{j}).pos(2), botRadius);
-			endif
-
-		endfor
-		
-		
-		if(collided != 0)
-			exitCon = 1;
+	nearest = [];
+	[collided, nearest] = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius);
+	if(nearest == [-1,-1,Inf] && collided = 1)
+		%%handle wall collision here.
+	elseif(length(nearest) == 3 && nearest != [-1,-1, Inf] && collided ==1)
+		bots.(name).pos = bots.(name).pos .+ rCollPMAmt(bots.(name).pos, nearest, [x,y], botRadius);
+		collided = 0;
+		bots.(name).sleep = 1;
+	endif
+	for(j = 1:nfields(bots))
+		if(j != i)
+			collided += circleCircleCollision(bots.(names{i}).pos(1), bots.(names{i}).pos(2),bots.(names{j}).pos(1), bots.(names{j}).pos(2), botRadius);
+		endif
+		if(collided ==1)
+			distX = bots.(name).pos(1) - bots.(names{j}).pos(1);
+			distY = bots.(name).pos(2) - bots.(names{j}).pos(2);
+			twoRad = botRadius * 2;
+			radDist = norm([x,y]) .* twoRad;
+			distToMove = [distX, distY] + radDist;
+			bots.(name).sleep = 0;
 			collided = 0;
-		endif 
-		
-	%until(collided ==0)
+		endif
+	endfor
+	
+	
+	if(collided != 0)
+		exitCon = 1;
+		collided = 0;
+	endif 
+	
+
 	
 	if(exitCon == 1)
 		collided = 0;
 		increment = .1;
 		exitLoop = 1;
-		do
-			collided = 0;
-			bots.(name).pos = bots.(name).pos - [x*increment,y*increment];
-			printf("x: %f y: %f\n", (x*increment), bots.(name).pos(1));
-			collided = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius);
-			for(j = 1:nfields(bots))
-				if(j != i)
-					collided += circleCircleCollision(bots.(names{i}).pos(1), bots.(names{i}).pos(2),bots.(names{j}).pos(1), bots.(names{j}).pos(2), botRadius);
-				endif
+		bots.(name).pos = bots.(name).pos - [x,y];
+		% do
+			% collided = 0;
+			% bots.(name).pos = bots.(name).pos - [x*increment,y*increment];
+			% printf("x: %f y: %f\n", (x*increment), bots.(name).pos(1));
+			% collided = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius);
+			% for(j = 1:nfields(bots))
+				% if(j != i)
+					% collided += circleCircleCollision(bots.(names{i}).pos(1), bots.(names{i}).pos(2),bots.(names{j}).pos(1), bots.(names{j}).pos(2), botRadius);
+				% endif
 
-			endfor
+			% endfor
 
-			if(x*increment < .000001)
+			% if(x*increment < .000001)
 				
-			endif
+			% endif
 			
-			if(collided == 0 || x*increment < .000001 || y*increment < .000001 )
+			% if(collided == 0 || x*increment < .000001 || y*increment < .000001 )
 				
-				if( x*increment < .000001 || y*increment < .000001 )
-					exitLoop = 0;
+				% if( x*increment < .000001 || y*increment < .000001 )
+					% exitLoop = 0;
 					
-				endif
-				increment /= 10;
-			endif
-		until(exitLoop == 0)
+				% endif
+				% increment /= 10;
+			% endif
+		% until(exitLoop == 0)
 		% if(recurse >10)
 			% if(x < 0)
 				% x+=.01;
@@ -105,6 +125,12 @@ function [status, bots] = euclidMove(energyCost, mu, sigma, bots, names, dist, f
 	
 	x = dist*cos(toRadians(bots.(name).angle));
 	y = dist*sin(toRadians(bots.(name).angle));
+	% if(x < .000000001)
+		% x = 0;
+	% endif
+	% if(y < .000000001)
+		% y = 0;
+	% endif
 	[collided, bots] = move(x, y, energyCost, names, bots, fid, i, 0);
 	fputs(fid, cstrcat("move ", name, " ", num2str(bots.(name).pos(1)), " ", num2str(bots.(name).pos(2)), " ", num2str(bots.(name).energy), "\n"));
 	

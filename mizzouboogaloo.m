@@ -1,4 +1,4 @@
-mizzouboogaloo.name = "hellobello";
+mizzouboogaloo.name = "mizzouboogaloo";
 
 mizzouboogaloo.blockSize = 50;
 

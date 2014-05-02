@@ -14,14 +14,21 @@ public class PictureVConverter {
 	public static final int miniMapBlockSize = 50;
 	
 	public static void main(String[] args){
+		execute(args);
+	}
+	
+	public static void execute(String[] args){
 		BufferedImage img = null;
-		String bitmapName = "mizzouboogaloo";
-		String description = "hellobello";
-		File imgFile = new File("res/" + bitmapName + ".png");
+		String bitmapName = args[1];
+		String description = bitmapName;
+		
+		File imgFile = new File("res/" + bitmapName);
+		System.out.println(bitmapName);
 		
 		try {
 		   img = ImageIO.read(imgFile);
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		int w = img.getWidth()+0;
@@ -34,9 +41,9 @@ public class PictureVConverter {
 		PrintWriter writer = null;
 		
 		//String fileDir = imgFile.getParent(); 
-		String fileDir = "C:\\CygwinScripts";
+		//String fileDir = "C:\\CygwinScripts";
 		String fileName = bitmapName + ".m";
-		File f = new File (fileDir,fileName);
+		File f = new File (System.getProperty("user.dir") + "/res",fileName);
 
 		try {
 			writer = new PrintWriter (f);
@@ -47,7 +54,7 @@ public class PictureVConverter {
 
 	
 		
-		writer.println(bitmapName + ".name = \"" + description + "\";\n");
+		writer.println(bitmapName + ".name = \"" +bitmapName + "\";\n");
 
 		
 		//insert minimap here

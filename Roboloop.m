@@ -1,5 +1,5 @@
-#!C:\cygwin64\bin\octave -qf
-%!D:\cygwin64\bin\octave -qf
+#!D:\cygwin64\bin\octave -qf
+%!C:\cygwin64\bin\octave -qf
 %!C:\Software\Octave-3.6.4\bin\octave -qf
 
 
@@ -25,11 +25,11 @@ function [pos,angle] = assignPosAndAng(i)
 	global botRadius;
 	
 	if(i == 1)
-		pos = [10+botRadius,10+botRadius];
-		angle = 45;
+		pos = [200+botRadius,100+botRadius];
+		angle = 92;
 	elseif(i ==	2)
-		pos = [rows(map.map)-botRadius-250, columns(map.map)-botRadius-250];
-		angle = 270-45;
+		pos = [rows(map.map)-botRadius - 350, columns(map.map)-botRadius-400];
+		angle = 271;
 	else
 		pos = [0,0];
 		angle = 0;
@@ -127,7 +127,7 @@ function [bots, executionMessage] = doCommand(energy, mu, sigma, bots, names, fi
 			
 		case "update"
 			command = "";
-	
+			bots.(name).sleep = 0;
 			[command, bots.(name).dataStruct] = feval(bots.(name).update, bots.(name).dataStruct, command);
 			bots = initCommand(command, bots, name, fid);
 			if(strcmp(bots.(name).currentCommand, "update") == 1)
@@ -282,6 +282,7 @@ for(i = offset:argSize)
 			bots.(x).sensorTurnAmount = 0;
 			bots.(x).sensorTurnDir = 1;
 			bots.(x).alive = 1;
+			bots.(x).sleep = 0;
 
 			
 			bots.(x).moveCycles = 0;
@@ -312,6 +313,7 @@ botOut = fopen (botOutFile, "w");
 disp(names);
 disp(bots);
 fputs(fid, cstrcat(num2str(botRadius), "\n"));
+fputs(fid, cstrcat(map.name, "\n"));
 fputs(fid, cstrcat(num2str(time), "\n"));
 fputs(fid, cstrcat(num2str(timeStep), "\n"));
 for(i = 1:length(names))
