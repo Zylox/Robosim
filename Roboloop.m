@@ -1,5 +1,5 @@
-#!D:\cygwin64\bin\octave -qf
-%!C:\cygwin64\bin\octave -qf
+#!C:\cygwin64\bin\octave -qf
+%!D:\cygwin64\bin\octave -qf
 %!C:\Software\Octave-3.6.4\bin\octave -qf
 
 
@@ -26,7 +26,8 @@ function [pos,angle] = assignPosAndAng(i)
 	
 	if(i == 1)
 		pos = [200+botRadius,100+botRadius];
-		angle = 92;
+		angle = 91;
+
 	elseif(i ==	2)
 		pos = [rows(map.map)-botRadius - 350, columns(map.map)-botRadius-400];
 		angle = 271;

@@ -26,9 +26,10 @@ function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, recurse)
 	bots.(name).pos = bots.(name).pos + [x,y];
 	nearest = [];
 	[collided, nearest] = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius);
-	if(nearest == [-1,-1,Inf] && collided = 1)
-		%%handle wall collision here.
-	elseif(length(nearest) == 3 && nearest != [-1,-1, Inf] && collided ==1)
+	% if(nearest == [-1,-1,Inf] && collided == 1)
+		%handle wall collision here.
+	if(length(nearest) == 3 && nearest != [-1,-1, Inf] && collided ==1)
+
 		bots.(name).pos = bots.(name).pos .+ rCollPMAmt(bots.(name).pos, nearest, [x,y], botRadius);
 		collided = 0;
 		bots.(name).sleep = 1;
@@ -125,12 +126,14 @@ function [status, bots] = euclidMove(energyCost, mu, sigma, bots, names, dist, f
 	
 	x = dist*cos(toRadians(bots.(name).angle));
 	y = dist*sin(toRadians(bots.(name).angle));
+
 	% if(x < .000000001)
 		% x = 0;
 	% endif
 	% if(y < .000000001)
 		% y = 0;
 	% endif
+	
 	[collided, bots] = move(x, y, energyCost, names, bots, fid, i, 0);
 	fputs(fid, cstrcat("move ", name, " ", num2str(bots.(name).pos(1)), " ", num2str(bots.(name).pos(2)), " ", num2str(bots.(name).energy), "\n"));
 	
@@ -139,7 +142,7 @@ function [status, bots] = euclidMove(energyCost, mu, sigma, bots, names, dist, f
 		status = "end";
 		return;
 	endif
-	
+
 	if(bots.(name).moveCycles <= 0)
 		status = "endmove";
 		return;

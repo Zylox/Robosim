@@ -3,10 +3,10 @@ function [collide, nearest] = circleMapCollision(x,y,radius)
 	%printf("%d %d %d\n", x,y, radius);
 	
 	global map;
+	collide = 0;
 	nearest = [-1,-1, Inf];
-	if(floor(x)-radius <=0 || floor(x)+radius > rows(map.map)+0 || floor(y)-radius <=0 || floor(y)+radius > columns(map.map)+0)
-		collide = 1;
-		
+	% if(x-radius <=0 || x+radius > rows(map.map)+0 || y-radius <=0 || y+radius > columns(map.map)+0)
+		% collide = 1;
 		% debugDisp("corners info")
 		% debugDisp(ceil(y)+radius)
 		% debugDisp(columns(map.map))
@@ -14,9 +14,33 @@ function [collide, nearest] = circleMapCollision(x,y,radius)
 		% debugDisp(rows(map.map))
 %		debugDisp(cstrcat("x: ",num2str(x)," y: ",num2str(y)));
 
+<<<<<<< HEAD
+		% return;
+	% endif
+	
+	
+	if(x - radius <1) %hit left wall
+		collide =1;
+		nearest = [1,y, x];
+		disp("hit left wall");
+		pause(3);
 		return;
 	endif
-
+	if(x+radius > rows(map.map)) %hit right wall
+		collide = 1;
+		nearest = [rows(map.map), y, rows(map.map) - x];
+		return;
+	endif
+	if(y-radius <1) %hit top
+		collide = 1;
+		nearest = [x, 1, y];
+		return;
+	endif
+	if(y+radius > columns(map.map)) % hit bottom wall
+		collide = 1;
+		nearest = [x,columns(map.map), columns(map.map) - y];
+		return;
+	endif
 	
 	corners = getRegionOfCorners(x-radius, y-radius , x+radius, y+radius);
 	
@@ -66,7 +90,8 @@ function angle = angleOfVec(x,y)
 			angle = pi/2;
 		endif
 	else
-		angle = atan(y/x);
+		angle = atan2(y,x);
+
 	endif
 endfunction
 
@@ -81,11 +106,12 @@ function vecAdj = rCollPMAmt(pos, nearest, movement, radius)
 		disp("Movex, movey");
 		disp(moveX);
 		disp(moveY);
-		if(moveX < 0)
-			angle = -angleOfVec(moveX,moveY);
-		else
+		% if(moveX < 0)
+			% angle = -angleOfVec(moveX,moveY);
+		% else
 			angle = angleOfVec(moveX,moveY);
-		endif
+		% endif
+
 	% disp("moveX, moveY");
 	% disp(moveX);
 	% disp(moveY);
