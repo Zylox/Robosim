@@ -1,6 +1,5 @@
-#!D:\cygwin64\bin\octave -qf
-%!C:\cygwin64\bin\octave -qf
-
+#!C:\cygwin64\bin\octave -qf
+%!D:\cygwin64\bin\octave -qf
 %!C:\Software\Octave-3.6.4\bin\octave -qf
 
 
@@ -10,27 +9,33 @@ clear;
 %windows execution
 % system("octave Roboloop.m -m mizzouboogaloo -b zachbot -b fergbot")
 
+%%%loads helper files
+%handles moving and turning of bot
 source("moveturn.m");
+%all collision detection logic
 source("collision.m");
+%handles sensor movement and ray tracing
 source("sensor.m");
 
+%%%global variables 
+%%kept to a minimum
+%even these may disappear in the near future
 global botRadius;
-global map;
-global time = 0;
 global debug = 0;
 
 
 %assinging initial position
-function [pos,angle] = assignPosAndAng(i)
-	global map;
+%this is a temporary fix
+function [pos,angle] = assignPosAndAng(i, map)
+	
 	global botRadius;
 	
 	if(i == 1)
-		pos = [100+botRadius,100+botRadius];
-		angle = 91;
+		pos = [200+botRadius,70+botRadius];
+		angle = 90;
 
 	elseif(i ==	2)
-		pos = [rows(map.map)-botRadius - 700, columns(map.map)-botRadius-300];
+		pos = [rows(map.map)-botRadius - 600, columns(map.map)-botRadius-100];
 		angle = 271;
 	else
 		pos = [0,0];
@@ -40,11 +45,13 @@ function [pos,angle] = assignPosAndAng(i)
 	
 endfunction
 
+%%%%%this function does any initialization needed by to execute the player commands
 function bots = initCommand(command, bots, name, fid)
+	
 	if(strcmp(command,"") !=1)
 		commandArgs = strsplit(command, " ");
 		dontDo = 0;
-
+		%switch(commandArgs)
 		if(strcmp(commandArgs(1),"finished"))
 			bots.(name).alive = 0;
 			bots.(name).currentCommand = "finished";
@@ -98,7 +105,7 @@ function bots = initCommand(command, bots, name, fid)
 	
 endfunction
 
-function [bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i)
+function [bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i, map)
 	name = names{i};
 	executionMessage = "";
 
@@ -109,7 +116,7 @@ function [bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, 
 			debugDisp(cstrcat(name ," is finished"))
 			
 		case "move"
-			[executionMessage, bots] = euclidMove(energy.moveEnergyCost, mu.movementMu, sigma.movementSigma, perStep.move, bots, names, fid, i);
+			[executionMessage, bots] = euclidMove(energy.moveEnergyCost, mu.movementMu, sigma.movementSigma, perStep.move, bots, names, fid, i, map);
 			
 			debugDisp(name)
 			debugDisp(bots.(name).pos)
@@ -137,10 +144,10 @@ function [bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, 
 					return;
 			endif
 			
-			[bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i);
+			[bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i, map);
 			
 		case "sense"
-			bots.(name).dataStruct.sensorReading = sense(energy.sensingEnergyCost, mu.sensingMu, sigma.sensingSigma, bots, names, i);
+			bots.(name).dataStruct.sensorReading = sense(energy.sensingEnergyCost, mu.sensingMu, sigma.sensingSigma, bots, names, i, map);
 			bots.(name).currentCommand = "update";
 			fputs(fid, cstrcat("sense ", name, " ", num2str(bots.(name).dataStruct.sensorReading) , "\n"));
 			
@@ -206,6 +213,8 @@ time1 = clock();
 botScripts = argv();
 
 bots = struct();
+map = struct();
+time = 0;
 %debug = 0;
 names = {};
 playercount = 0;
@@ -275,8 +284,13 @@ for(i = offset:argSize)
 			zeroState = struct();
 			zeroState.sensorReading = 0;
 			zeroState.output = "";
+			zeroState.mu = mu;
+			zeroState.sigma = sigma;
+			zeroState.energy = energy;
+			zeroState.perStep = perStep;
+			zeroState.botRadius = botRadius;
 			bots.(x).dataStruct = feval(strcat(x, "init"),zeroState);
-			[bots.(x).pos, bots.(x).angle] = assignPosAndAng(playercount);
+			[bots.(x).pos, bots.(x).angle] = assignPosAndAng(playercount, map);
 			bots.(x).turnAmount = 0;
 			bots.(x).turnDir = 1;
 			bots.(x).sensorAngle = bots.(x).angle;
@@ -334,6 +348,7 @@ fputs(fid, "\n");
 collided = 0;
 timeOff = 0;
 
+
 if(time<=0)
 	timeOff = 1;
 endif
@@ -346,7 +361,7 @@ while (collided !=1)
 	for(i = 1:nfields(bots))
 		%disp(bots.(names{i}).still);
 		
-		[bots, commandStatus] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i);
+		[bots, commandStatus] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i, map);
 
 		fputs(botOut, cstrcat(names{i}, ": ", bots.(names{i}).dataStruct.output, "\n"));
 		

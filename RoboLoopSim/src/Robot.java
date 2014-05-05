@@ -31,8 +31,8 @@ public class Robot {
 	}
 	
 	public void initBody(int x, int y, int radius, float angle, float senseAng){
-		x = x;
-		y = y;
+		x = x-1;
+		y = y-1;
 		this.radius = radius;
 		body = new Circle(x,y,radius);
 		direction = new Line(x, y, (float)(x+radius*Math.cos(angle)), (float)(y+radius*Math.sin(angle)));
@@ -42,8 +42,8 @@ public class Robot {
 	}
 	
 	public void setPosition(float x, float y){
-		x = x;
-		y = y;
+		x = x-1;
+		y = y-1;
 		body.setCenterX(x);
 		body.setCenterY(y);
 		setBotDirection(botDir);

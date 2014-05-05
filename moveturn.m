@@ -1,5 +1,5 @@
 %bots need to call this to mov
-function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, recurse)
+function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, map)
 	name = names{i};
 	%global bots;
 	global botRadius
@@ -25,7 +25,7 @@ function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, recurse)
 
 	bots.(name).pos = bots.(name).pos + [x,y];
 	nearest = [];
-	[collided, nearest] = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius);
+	[collided, nearest] = circleMapCollision(bots.(name).pos(1),bots.(name).pos(2),botRadius, map);
 	% if(nearest == [-1,-1,Inf] && collided == 1)
 		%handle wall collision here.
 	if(length(nearest) == 3 && nearest != [-1,-1, Inf] && collided ==1)
@@ -69,7 +69,7 @@ function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, recurse)
 	
 endfunction
 
-function [status, bots] = euclidMove(energyCost, mu, sigma, perStep, bots, names, fid, i)
+function [status, bots] = euclidMove(energyCost, mu, sigma, perStep, bots, names, fid, i, map)
 	name = names{i};
 	dist = perStep;
 	%scale = 2;
@@ -99,7 +99,7 @@ function [status, bots] = euclidMove(energyCost, mu, sigma, perStep, bots, names
 		% y = 0;
 	% endif
 	
-	[collided, bots] = move(x, y, energyCost, names, bots, fid, i, 0);
+	[collided, bots] = move(x, y, energyCost, names, bots, fid, i, map);
 	fputs(fid, cstrcat("move ", name, " ", num2str(bots.(name).pos(1)), " ", num2str(bots.(name).pos(2)), " ", num2str(bots.(name).energy), "\n"));
 	
 	

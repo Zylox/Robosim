@@ -1,8 +1,7 @@
-function [collide, nearest] = circleMapCollision(x,y,radius)
+function [collide, nearest] = circleMapCollision(x,y,radius, map)
 	%(x-a)^2 + (y-b)^2 - r^2 = 0
 	%printf("%d %d %d\n", x,y, radius);
 	
-	global map;
 	collide = 0;
 	nearest = [-1,-1, Inf];
 	% if(x-radius <=0 || x+radius > rows(map.map)+0 || y-radius <=0 || y+radius > columns(map.map)+0)
@@ -39,7 +38,7 @@ function [collide, nearest] = circleMapCollision(x,y,radius)
 		return;
 	endif
 	
-	corners = getRegionOfCorners(x-radius, y-radius , x+radius, y+radius);
+	corners = getRegionOfCorners(x-radius, y-radius , x+radius, y+radius, map);
 	
 	checkIt = 0;
 	
@@ -80,16 +79,16 @@ function [collide, nearest] = circleMapCollision(x,y,radius)
 endfunction
 
 function angle = angleOfVec(x,y)
-	if(x == 0)
-		if(y > 0)
-			angle = (3*pi)/2;
-		else
-			angle = pi/2;
-		endif
-	else
+	% if(x == 0)
+		% if(y > 0)
+			% angle = (3*pi)/2;
+		% else
+			% angle = pi/2;
+		% endif
+	% else
 		angle = atan2(y,x);
 
-	endif
+	% endif
 endfunction
 
 function vecAdj = rCollPMAmt(pos, nearest, movement, radius)
@@ -99,15 +98,11 @@ function vecAdj = rCollPMAmt(pos, nearest, movement, radius)
 	nearY = nearest(2);
 	moveX = movement(1);
 	moveY = movement(2);
-	
-		debugDisp("Movex, movey");
-		debugDisp(moveX);
-		debugDisp(moveY);
-		% if(moveX < 0)
-			% angle = -angleOfVec(moveX,moveY);
-		% else
-			angle = angleOfVec(moveX,moveY);
-		% endif
+
+	debugDisp("Movex, movey");
+	debugDisp(moveX);
+	debugDisp(moveY);
+	angle = angleOfVec(moveX,moveY);
 
 	% disp("moveX, moveY");
 	% disp(moveX);
@@ -158,9 +153,8 @@ function point = traceToEdgeOfCirc(x,y,angle,circX,circY)
 	
 endfunction
 
-function collide = pixelMapCollision(x, y)
+function collide = pixelMapCollision(x, y, map)
 
-	global map;
 	if(floor(x) <=1 || floor(x)> rows(map.map) || floor(y) <=1 || floor(y) > columns(map.map))
 		collide = 1;
 		
@@ -182,6 +176,7 @@ function collide = pixelMapCollision(x, y)
 endfunction
 
 function collide = pixelCircleCollision(x,y, xc, yc, radius)
+	
 	distSq = (xc-x)^2 + (yc-y)^2;
 	if(distSq < radius^2)
 		collide = 1;
@@ -201,8 +196,8 @@ function collided = circleCircleCollision(x1,y1,x2,y2,radius)
 	endif
 endfunction
 
-function regOfCorners = getRegionOfCorners(x1, y1 , x2, y2)
-	global map;
+function regOfCorners = getRegionOfCorners(x1, y1 , x2, y2, map)
+
 	
 	size = map.blockSize;
 	x1 = int32(x1);

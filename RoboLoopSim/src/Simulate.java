@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Point;
@@ -27,11 +28,13 @@ public class Simulate extends BasicGameState {
 	private ArrayList<Robot> bots;
 	private int stopWatch;
 	private boolean simulating;
+	private boolean dead;
 	private float time;
 	private float timeStep;
 	private int counter = 0;
 	private ArrayList<Circle> points;
 	private boolean readFromBotOut = true;
+	private boolean renderBack = true;
 
 
 	public Simulate(int id){
@@ -111,13 +114,16 @@ public class Simulate extends BasicGameState {
 
 		background = new Image("res/" + backPic);
 		simulating = true;
+		dead = false;
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game,  Graphics g)
 			throws SlickException {
 		// TODO Auto-generated method stub
-		background.draw();
+		if(renderBack){
+			background.draw();
+		}
 
 		for (Robot b : bots) {
 			b.render(container, g);
@@ -152,7 +158,13 @@ public class Simulate extends BasicGameState {
 			throws SlickException {
 		// TODO Auto-generated method stub
 
-		if (simulating) {
+		if(container.getInput().isKeyPressed(Input.KEY_Q)){
+			renderBack = !renderBack;
+		}else if(container.getInput().isKeyPressed(Input.KEY_P)){
+			simulating = !simulating;
+		}
+		
+		if (simulating && !dead) {
 			stopWatch += delta;
 			if (stopWatch >= timeStep) {
 				for (Robot b : bots) {
@@ -170,6 +182,7 @@ public class Simulate extends BasicGameState {
 
 					if (lineParts[0].equals("end")) {
 						simulating = false;
+						dead = true;
 						return;
 					}
 					if (b.name.equals(lineParts[1])) {

@@ -4,7 +4,9 @@ zchb93Angle = 0;
 
 function zeroState = zchb93init(zeroState)
 	zeroState.moveCounter = 0;
-	
+	zeroState.turnAmt = 0;
+	zeroState.turnDirection = 1;
+	zeroState.senseTiming = 0;
 endfunction
 
 function [command, newState] = zchb93Update(oldState, command)
@@ -14,25 +16,47 @@ function [command, newState] = zchb93Update(oldState, command)
 	
 	newState = oldState;
 	%disp(newState)
-
-	if(mod(newState.moveCounter,4) == 0)
-		command = "move 300";
-		newState.output = "moving 23";
-		% newState.moveCounter = 0;
-		newState.output = "turning 33";
-	elseif(mod(newState.moveCounter,4) == 1)
-		command = "sense";
-		newState.output = "sensor turning 27";
+	
+	if(mod(newState.moveCounter,2) == 0)
+		command = "turn 2";
+		newState.output = "turning 1";
+		newState.moveCounter = 0;
+	% elseif(mod(newState.moveCounter,4) == 1)
+		% command = "move 10";
+		% newState.output = "senso";
 	% elseif(mod(newState.moveCounter,4) == 2)
 		% command = "sense";
 		% newState.output = "voodoo sensing powers";
 	else
-		command = "finished";
+		command = "move 10";
 		
 	endif
-		
-    
 	newState.moveCounter +=1;
+	return;
+	command = "move 1000";
+	return;
+	
+	if(newState.senseTiming == 0)
+		command = "sense";
+		newState.senseTiming = 1;
+		return;
+	endif
+	
+	if(newState.turnAmt > 90)
+		newState.turnDirection = -1;
+	elseif(newState.turnAmt < -90 )
+		newState.turnDirection = 1;
+	endif
+	
+	if(newState.turnDirection == -1)
+		command = "turn -1";
+		newState.turnAmt -= 1;
+	elseif(newState.turnDirection == 1)
+		command = "turn 1";
+		newState.turnAmt +=1;
+	endif
+    newState.senseTiming = 0;
+	
 	
 endfunction
 

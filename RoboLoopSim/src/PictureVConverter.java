@@ -15,12 +15,12 @@ public class PictureVConverter {
 	public static final int miniMapBlockSize = 50;
 	
 	public static void main(String[] args){
-		execute(args);
+		
 	}
 	
-	public static void execute(String[] args){
+	public static void execute(String pictureName){
 		BufferedImage img = null;
-		String bitmapName = args[1];
+		String bitmapName = pictureName;
 		String description = bitmapName;
 		
 		File imgFile = new File("res/" + bitmapName);

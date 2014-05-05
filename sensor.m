@@ -49,7 +49,7 @@ function bots = initSensorIncTurn(bots, name, angle)
 		bots.(name).sensorTurnAmount = abs(angle);
 endfunction
 
-function dist = sense(energyCost, mu, sigma, bots, names, i)
+function dist = sense(energyCost, mu, sigma, bots, names, i, map)
 	global botRadius;
 	name = names{i};
 	engReq = energyCost;
@@ -81,12 +81,14 @@ function dist = sense(energyCost, mu, sigma, bots, names, i)
 		x += moveDist*dx;
 		y += moveDist*dy;
 		dist += moveDist;
-		collide = pixelMapCollision(x,y);
+		collide = pixelMapCollision(x,y, map);
 		for(j = 1:nfields(bots))
 			if(j != i)
 				collide += pixelCircleCollision(x,y, bots.(names{j}).pos(1), bots.(names{j}).pos(2), botRadius);
 			endif
 		endfor
 	endwhile
+	
+	dist += rnd;
 	
 endfunction
