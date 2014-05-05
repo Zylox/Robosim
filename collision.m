@@ -21,8 +21,6 @@ function [collide, nearest] = circleMapCollision(x,y,radius)
 	if(x - radius <1) %hit left wall
 		collide =1;
 		nearest = [1,y, x];
-		disp("hit left wall");
-		pause(3);
 		return;
 	endif
 	if(x+radius > rows(map.map)) %hit right wall
