@@ -26,11 +26,11 @@ function [pos,angle] = assignPosAndAng(i)
 	global botRadius;
 	
 	if(i == 1)
-		pos = [200+botRadius,100+botRadius];
+		pos = [100+botRadius,100+botRadius];
 		angle = 91;
 
 	elseif(i ==	2)
-		pos = [rows(map.map)-botRadius - 350, columns(map.map)-botRadius-400];
+		pos = [rows(map.map)-botRadius - 700, columns(map.map)-botRadius-300];
 		angle = 271;
 	else
 		pos = [0,0];
@@ -98,7 +98,7 @@ function bots = initCommand(command, bots, name, fid)
 	
 endfunction
 
-function [bots, executionMessage] = doCommand(energy, mu, sigma, bots, names, fid, i)
+function [bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i)
 	name = names{i};
 	executionMessage = "";
 
@@ -109,20 +109,20 @@ function [bots, executionMessage] = doCommand(energy, mu, sigma, bots, names, fi
 			debugDisp(cstrcat(name ," is finished"))
 			
 		case "move"
-			[executionMessage, bots] = euclidMove(energy.moveEnergyCost, mu.movementMu, sigma.movementSigma, bots, names, 1, fid, i);
+			[executionMessage, bots] = euclidMove(energy.moveEnergyCost, mu.movementMu, sigma.movementSigma, perStep.move, bots, names, fid, i);
 			
 			debugDisp(name)
 			debugDisp(bots.(name).pos)
 			debugDisp(bots.(name).moveCycles)
 			
 		case "turn"
-			[bots,executionMessage] = incrementalTurn(energy.turnEnergyCost, mu.turningMu, sigma.turningSigma, bots, name, fid);
+			[bots,executionMessage] = incrementalTurn(energy.turnEnergyCost, mu.turningMu, sigma.turningSigma, perStep.turn, bots, name, fid);
 			
 			debugDisp(name)
 			debugDisp(bots.(name).angle)
 			
 		case "turnSensor"
-			[bots,executionMessage] = sensorIncrementalTurn(energy.turnSensorEnergyCost, mu.turningSensorMu, sigma.turningSensorSigma, bots, name, fid);
+			[bots,executionMessage] = sensorIncrementalTurn(energy.turnSensorEnergyCost, mu.turningSensorMu, sigma.turningSensorSigma, perStep.turnSensor, bots, name, fid);
 			
 			debugDisp(name)
 			debugDisp(bots.(name).sensorAngle)
@@ -137,7 +137,7 @@ function [bots, executionMessage] = doCommand(energy, mu, sigma, bots, names, fi
 					return;
 			endif
 			
-			[bots, executionMessage] = doCommand(energy, mu, sigma, bots, names, fid, i);
+			[bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i);
 			
 		case "sense"
 			bots.(name).dataStruct.sensorReading = sense(energy.sensingEnergyCost, mu.sensingMu, sigma.sensingSigma, bots, names, i);
@@ -267,7 +267,6 @@ for(i = offset:argSize)
 		
 		case "-b"
 			i++;
-			disp(i);
 			playercount++;
 			source(strcat(arguments(i), ".m"));
 			x = eval(strcat(arguments(i),".name"));
@@ -290,7 +289,7 @@ for(i = offset:argSize)
 			bots.(x).moveCycles = 0;
 			bots.(x).currentCommand = "update";
 			names{playercount} = x;
-			disp(bots);
+			%disp(bots);
 		case "-debug"
 			debug = 1;
 		otherwise
@@ -313,7 +312,6 @@ botOut = fopen (botOutFile, "w");
 
 
 disp(names);
-disp(bots);
 fputs(fid, cstrcat(num2str(botRadius), "\n"));
 fputs(fid, cstrcat(map.name, "\n"));
 fputs(fid, cstrcat(num2str(time), "\n"));
@@ -340,13 +338,15 @@ if(time<=0)
 	timeOff = 1;
 endif
 
+
 while (collided !=1)
 	global botRadius;
-	aliveCheck = nfields(bots);
+	%aliveCheck = nfields(bots);
+	aliveCheck = 0;
 	for(i = 1:nfields(bots))
 		%disp(bots.(names{i}).still);
 		
-		[bots, commandStatus] = doCommand(energy, mu, sigma, bots, names, fid, i);
+		[bots, commandStatus] = doCommand(energy, mu, sigma, perStep, bots, names, fid, i);
 
 		fputs(botOut, cstrcat(names{i}, ": ", bots.(names{i}).dataStruct.output, "\n"));
 		
@@ -360,7 +360,7 @@ while (collided !=1)
 		endif
 				
 		if(strcmp(commandStatus, "end"))
-
+		
 		endif
 		
 		if(collided == 1)
@@ -384,13 +384,14 @@ fputs(fid, "end");
 fclose (fid);
 fputs(botOut,"end");
 fclose (botOut);
+disp("time elapsed");
+disp(etime(clock(), time1))
 if(runS == 1)
 	runSim();
 endif
 
 disp("done");
-disp("time elapsed");
-disp(etime(clock(), time1))
+
 
 clear;
 

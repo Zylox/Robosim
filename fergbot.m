@@ -18,7 +18,7 @@ function [command, newState] = ngfnbfUpdate(oldState, command)
 		command = "move 200";
 		newState.output = "GO GO";
 	else
-		command = "turn 20";
+		command = "finished";
 		newState.output = "";
 	endif
 	

@@ -19,8 +19,8 @@ function [bots,status] = turnSensor(energyCost, bots, name, angle)
 	endif
 endfunction
 
-function [bots,status] = sensorIncrementalTurn(energyCost, mu, sigma, bots, name, fid)
-	increment = 1;
+function [bots,status] = sensorIncrementalTurn(energyCost, mu, sigma, perStep, bots, name, fid)
+	increment = perStep;
 	if(bots.(name).sensorTurnAmount < increment)
 		increment = bots.(name).sensorTurnAmount;
 	endif

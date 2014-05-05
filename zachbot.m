@@ -20,14 +20,14 @@ function [command, newState] = zchb93Update(oldState, command)
 		newState.output = "moving 23";
 		% newState.moveCounter = 0;
 		newState.output = "turning 33";
-	% elseif(mod(newState.moveCounter,4) == 1)
-		% command = "turnSensor 27";
-		% newState.output = "sensor turning 27";
+	elseif(mod(newState.moveCounter,4) == 1)
+		command = "sense";
+		newState.output = "sensor turning 27";
 	% elseif(mod(newState.moveCounter,4) == 2)
 		% command = "sense";
 		% newState.output = "voodoo sensing powers";
 	else
-		command = "turn 33";
+		command = "finished";
 		
 	endif
 		

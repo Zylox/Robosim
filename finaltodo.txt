@@ -7,7 +7,7 @@
 -work on visual appeal
 --sensor distance --done
 -comment code
--tie up end conditions
+-tie up end conditions						--done
 -configureable time							--done
 
 talk aobut:

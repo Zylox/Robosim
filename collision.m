@@ -100,9 +100,9 @@ function vecAdj = rCollPMAmt(pos, nearest, movement, radius)
 	moveX = movement(1);
 	moveY = movement(2);
 	
-		disp("Movex, movey");
-		disp(moveX);
-		disp(moveY);
+		debugDisp("Movex, movey");
+		debugDisp(moveX);
+		debugDisp(moveY);
 		% if(moveX < 0)
 			% angle = -angleOfVec(moveX,moveY);
 		% else
@@ -125,8 +125,8 @@ function vecAdj = rCollPMAmt(pos, nearest, movement, radius)
 	
 	pointOfContact = traceToEdgeOfCirc(nearX,nearY,angle,posX,posY);
 	vecAdj = [nearest(1),nearest(2)] .- pointOfContact;
-	disp("Moved back By");
-	disp(vecAdj);
+	debugDisp("Moved back By");
+	debugDisp(vecAdj);
 	
 endfunction
 
@@ -146,12 +146,12 @@ function point = traceToEdgeOfCirc(x,y,angle,circX,circY)
 		% dist += moveDist;
 		%collide = pixelMapCollision(x,y);
 		collide = pixelCircleCollision(x,y, circX, circY, botRadius);
-		disp("tracing");
-		disp(x);
-		disp(y);
-		disp(circX);
-		disp(circY);
-		disp(angle);
+		debugDisp("tracing");
+		debugDisp(x);
+		debugDisp(y);
+		debugDisp(circX);
+		debugDisp(circY);
+		debugDisp(angle);
 	endwhile
 	point = [x,y];
 	
