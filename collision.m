@@ -14,7 +14,6 @@ function [collide, nearest] = circleMapCollision(x,y,radius)
 		% debugDisp(rows(map.map))
 %		debugDisp(cstrcat("x: ",num2str(x)," y: ",num2str(y)));
 
-<<<<<<< HEAD
 		% return;
 	% endif
 	
