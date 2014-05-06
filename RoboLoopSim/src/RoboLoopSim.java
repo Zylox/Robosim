@@ -17,7 +17,7 @@ public class RoboLoopSim extends StateBasedGame {
 	
 	public static void main(String[] args) {
 
-		PictureVConverter.execute("starmap.png");
+		//PictureVConverter.execute("starmap.png");
 		
 		try{
 			AppGameContainer app = new AppGameContainer(new RoboLoopSim("Simulation"));

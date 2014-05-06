@@ -16,11 +16,13 @@ public class Robot {
 	protected String name;
 	private Color color;
 	private Line direction;
+	private Line senseDirection;
 	private int radius;
 	private float botDir;
 	private float senseDir;
 	private float energy;
 	private Line senseLine;
+	private boolean renderSenseLine;
 	private String displayString;
 	
 
@@ -28,6 +30,7 @@ public class Robot {
 		this.name = name;
 		this.index = index;
 		displayString = "";
+		renderSenseLine = false;
 	}
 	
 	public void initBody(int x, int y, int radius, float angle, float senseAng){
@@ -36,6 +39,7 @@ public class Robot {
 		this.radius = radius;
 		body = new Circle(x,y,radius);
 		direction = new Line(x, y, (float)(x+radius*Math.cos(angle)), (float)(y+radius*Math.sin(angle)));
+		senseDirection = new Line(x, y, (float)(x+radius*Math.cos(senseAng)), (float)(y+radius*Math.sin(senseAng)));
 		botDir = angle;
 		senseLine = new Line(-1, -1, -1, -1);
 		senseDir = senseAng;
@@ -47,6 +51,7 @@ public class Robot {
 		body.setCenterX(x);
 		body.setCenterY(y);
 		setBotDirection(botDir);
+		setSenseDirection(senseDir);
 	}
 	
 	public void setEnergy(float energy){
@@ -64,12 +69,13 @@ public class Robot {
 		float x = body.getCenterX();
 		float y = body.getCenterY();
 		senseDir = angle;
-		
+		senseDirection.set(x, y, (float)(x+(radius/2)*Math.cos(Math.toRadians(angle))), (float)(y+(radius/2)*Math.sin(Math.toRadians(angle))));
 	}
 	
 	public void setSenseLine(float length){
 		float x = body.getCenterX();
 		float y = body.getCenterY();
+		renderSenseLine = true;
 		senseLine.set(x, y, (float)(x+length*Math.cos(Math.toRadians(senseDir))), (float)(y+length*Math.sin(Math.toRadians(senseDir))));
 		
 	}
@@ -83,13 +89,18 @@ public class Robot {
 		g.fill(body);
 		g.setColor(Color.red);
 		g.draw(direction);
-		g.setColor(Color.blue);
-		g.draw(senseLine);
-		g.draw(new Circle(senseLine.getEnd().x,senseLine.getEnd().y, 10));
-		g.setColor(Color.yellow);
-		float x = body.getCenterX() - radius - 20;
-		float y = body.getCenterY() - radius - 20;
-		g.fill(new Rectangle(x,y,energy/100, 10));
+		g.setColor(Color.black);
+		g.draw(senseDirection);
+		if(renderSenseLine){
+			g.setColor(Color.black);
+			g.draw(senseLine);
+			renderSenseLine = false;
+			g.draw(new Circle(senseLine.getEnd().x,senseLine.getEnd().y, 10));
+		}
+		
+		g.setColor(Color.black);
+		String ener = Float.toString(energy);
+		g.drawString(ener, body.getCenterX()-(ener.length()*10)/2, body.getCenterY()-radius - 15);
 		g.setColor(Color.blue);
 		g.drawString(displayString, 5, container.getHeight()-(15*index) -20);
 	}

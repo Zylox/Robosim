@@ -70,7 +70,7 @@ function bots = initCommand(command, bots, name, fid)
 
 					return;
 				endif
-				bots.(name).moveCycles = moves;
+				bots.(name).moveCycles = abs(moves);
 				bots.(name).currentCommand = "move";
 			
 			case "turn"									%turn command
@@ -142,7 +142,7 @@ function [bots, executionMessage] = doCommand(energy, mu, sigma, perStep, bots, 
 			debugDisp(bots.(name).angle)
 			
 		case "turnSensor"								%executes the sensor turn
-			[bots,executionMessage] = sensorIncrementalTurn(energy.turnSensorEnergyCost, mu.turningSensorMu, sigma.turningSensorSigma, perStep.turnSensor, bots, name, fid);
+			[bots,executionMessage] = sensorIncrementalTurn(energy.turnSensorEnergyCost, mu.turningSensorMu, sigma.turningSensorSigma, perStep.sensorTurn, bots, name, fid);
 			
 			debugDisp(name)
 			debugDisp(bots.(name).sensorAngle)

@@ -7,12 +7,8 @@ endfunction
 
 
 function [command, newState] = ngfnbfUpdate(oldState, command)
-	%disp("zachworked");
-	%moveBot(5,6,"zchb93");
-	%zchb93Angle = 30;
-	
+
 	newState = oldState;
-	%disp(newState)
 	newState.moveCounter +=1;
 	if(mod(newState.moveCounter,3) == 0)
 		command = "move 10";

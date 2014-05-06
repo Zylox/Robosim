@@ -39,7 +39,6 @@ function [collide, nearest] = circleMapCollision(x,y,radius, map)
 	endif
 	
 	corners = getRegionOfCorners(x-radius, y-radius , x+radius, y+radius, map);
-	
 	checkIt = 0;
 	
 	% for(q = 1:4)

@@ -42,7 +42,7 @@ function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, map)
 		if(collided ==1)
 			distX = bots.(name).pos(1) - bots.(names{j}).pos(1);
 			distY = bots.(name).pos(2) - bots.(names{j}).pos(2);
-			dirToNear = ([distX,distY] / norm([distX,distY])) .*botRadius;
+			dirToNear = ([distX,distY] / norm([distX,distY])) .* botRadius;
 			dirToNear = dirToNear .+ bots.(names{j}).pos;
 			nearest = [dirToNear(1), dirToNear(2), botRadius];
 			bots.(name).pos = bots.(name).pos .+ rCollPMAmt(bots.(name).pos,nearest, [x,y], botRadius); 
