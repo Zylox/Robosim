@@ -1,5 +1,6 @@
-#!C:\cygwin64\bin\octave -qf
-%!D:\cygwin64\bin\octave -qf
+#!D:\cygwin64\bin\octave -qf
+%!C:\cygwin64\bin\octave -qf
+
 %!C:\Software\Octave-3.6.4\bin\octave -qf
 
 
@@ -51,54 +52,49 @@ function bots = initCommand(command, bots, name, fid)
 	if(strcmp(command,"") !=1)
 		commandArgs = strsplit(command, " ");
 		dontDo = 0;
-		%switch(commandArgs)
-		if(strcmp(commandArgs(1),"finished"))
-			bots.(name).alive = 0;
-			bots.(name).currentCommand = "finished";
+		switch(commandArgs{1})
+			case "finished"
+				bots.(name).alive = 0;
+				bots.(name).currentCommand = "finished";
 		
-		elseif(strcmp(commandArgs(1),"move"))
-			moves = str2num(commandArgs{2});
-			if(moves == 0)
-				%fputs(fid, cstrcat("moveIs0 ", name, "\n"));
-				return;
-			endif
-			bots.(name).moveCycles = moves;
-			bots.(name).currentCommand = "move";
-			%fputs(fid, cstrcat("setMove ", name, "\n"));
+			case "move"
+				moves = str2num(commandArgs{2});
+				if(moves == 0)
+
+					return;
+				endif
+				bots.(name).moveCycles = moves;
+				bots.(name).currentCommand = "move";
 			
-		elseif(strcmp(commandArgs(1),"turn"))
-			turns = str2num(commandArgs{2});
-			if(turns == 0)
-				%fputs(fid, cstrcat("turnIs0 ", name, "\n"));
-				return;
-			endif
-			bots = initIncTurn(bots, name, turns);
-			bots.(name).currentCommand = "turn";
-			%fputs(fid, cstrcat("setTurn ", name, "\n"));
+			case "turn"
+				turns = str2num(commandArgs{2});
+				if(turns == 0)
+
+					return;
+				endif
+				bots = initIncTurn(bots, name, turns);
+				bots.(name).currentCommand = "turn";
+
 			
-		elseif(strcmp(commandArgs(1),"turnSensor"))
-			turns = str2num(commandArgs{2});
-			if(turns == 0)
-				fputs(fid, cstrcat("sensTurnis0 ", name, "\n"));
-				return;
-			endif
-			bots = initSensorIncTurn(bots, name, turns);
-			bots.(name).currentCommand = "turnSensor";
-			%fputs(fid, cstrcat("setSensorTurn ", name, "\n"));
+			case "turnSensor"
+				turns = str2num(commandArgs{2});
+				if(turns == 0)
+					fputs(fid, cstrcat("sensTurnis0 ", name, "\n"));
+					return;
+				endif
+				bots = initSensorIncTurn(bots, name, turns);
+				bots.(name).currentCommand = "turnSensor";
+
 		
-		elseif(strcmp(commandArgs(1),"sense"))
-			%bots.(name).currentCommand = "sense";
-			bots.(name).currentCommand = "sense";
+			case "sense"
+				bots.(name).currentCommand = "sense";
 			
-			
-		else
-			%fputs(fid, cstrcat("invalid ", name, "\n"));
-			bots.(name).currentCommand = "update";
-			dontDo = 1;
-		endif
+			otherwise
+				bots.(name).currentCommand = "update";
+				dontDo = 1;
+		endswitch
 		
 	else
-		%fputs(fid, cstrcat("null ", name, "\n"));
 		bots.(name).currentCommand = "update";
 	endif	
 		
