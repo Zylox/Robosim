@@ -20,5 +20,5 @@ perStep.sensorTurn = 1;
 
 time = 100000;
 timeStep = 10;
-botRadius = 20;
+botRadius = 5;
 defaultCommandLineArgs = "heloo world";

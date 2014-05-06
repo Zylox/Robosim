@@ -1,4 +1,4 @@
-%bots need to call this to mov
+%executes move
 function [exitCon, bots] = move(x, y, energyCost, names, bots, fid, i, map)
 	name = names{i};
 	%global bots;
@@ -113,73 +113,6 @@ function [status, bots] = euclidMove(energyCost, mu, sigma, perStep, bots, names
 		return;
 	endif
 
-endfunction
-
-function [status, bots] = bresMove(bots, name, fid)
-	scale = 2;
-	status = "";
-	xMove = 0;
-	yMove = 0;
-	
-	collided = 0;
-	
-	e2 = 2*bots.(name).bresErr(1);
-	if(e2 > -1.0 * bots.(name).deltas(2))
-		bots.(name).bresErr(1) -= bots.(name).deltas(2);
-		xMove = bots.(name).direction(1)/scale;
-	endif
-	if(e2 < bots.(name).deltas(1))
-		bots.(name).bresErr(1) += bots.(name).deltas(1);
-		yMove = bots.(name).direction(2)/scale;
-	endif
-	
-	[collided, bots] = move(xMove, yMove, name, bots, fid);
-	bots.(name).pos(1) = round(bots.(name).pos(1) * 100) /100;
-	bots.(name).pos(2) = round(bots.(name).pos(2) * 100) /100;
-	fputs(fid, cstrcat("move ", name, " ", num2str(bots.(name).pos(1)), " ", num2str(bots.(name).pos(2)), "\n"));
-	
-	if(( bots.(name).pos(1) == bots.(name).moveToPoint(1) && bots.(name).pos(2) == bots.(name).moveToPoint(2)));
-		status = "endmove";
-		return;
-	endif 
-	
-	if(collided)
-		status = "end";
-		return;
-	endif
-	
-	
-	
-endfunction
-
-function bots = bresMoveInit(commandArgs, bots, name)
-			scale = 2;
-			
-			x0 = bots.(name).pos(1);
-			y0 = bots.(name).pos(2);
-			x1 = x0 + str2num(commandArgs{2});
-			y1 = y0 + str2num(commandArgs{3});
-		
-			bots.(name).moveToPoint = [x1, y1];
-		
-			dx = abs(x1-x0)*scale;
-			dy = abs(y1 - y0)*scale;
-			if(x0 < x1)
-				bots.(name).direction(1) = 1;
-			else
-				bots.(name).direction(1) = -1;
-			endif
-			
-			if(y0 < y1)
-				bots.(name).direction(2) = 1;
-			else
-				bots.(name).direction(2) = -1;
-			endif			
-			
-			bots.(name).bresErr(1) = dx - dy;
-			bots.(name).deltas(1) = dx;
-			bots.(name).deltas(2) = dy;
-		
 endfunction
 
 function [bots,status] = turn(energyCost, bots, name, angle)
