@@ -1,12 +1,12 @@
-Welcome to the Robotics Simulation Manual!
-==========================================
+How To Use:
+------------------------------------------
 Written by Zachary Higginbotham  
 
 email: zch5of6@hotmail.com
 
 
 Goal Of this Program:
-====================
+--------------------
 This program is designed to assist students learning techniques in data fusion and information filtering
 by providing a simulation of virtual robots which they can program using whatever logic for localization they desire and interfacing
 with the simulation using a simple api. Actions, such as moving, turning, reading from a sensor, all take energy, which is a limited resource.
@@ -15,10 +15,10 @@ The bot's only view of the world is through its sole sensor placed at its center
 The language the user will be programming the bots in is Octave, a GNU version of MATLAB.
 
 Setup Instructions:
-====================
+--------------------
 
 Example use:
-===============
+---------------
 To program your own robot, you will want to start with the template robot file, which is provided. See that file for specifics.
 The user will initialize values they need to keep track of in the init function.
 All update logic takes place in the update function. This is where you will implement the logic of your bot.
@@ -31,7 +31,7 @@ All commands will execute over multiple steps and then control will be handed ba
 
 
 Quick things of note:
-=====================
+---------------------
 * Bots are circles. 
 * In the state object that gets passed to update, there is a field called output that you can put a string in.
   This string will appear on the graphics program when run. It is a persistent string until you change it, so you don't have to set it every cycle
@@ -40,7 +40,7 @@ Quick things of note:
   
   
 Commands available to you are:
-==============================
+------------------------------
 * "move X" - This will execute a command to move your bot in your current direction by X units.
 			 Randomness is added at each step.
 			 Limitations: only movement forward is allowed currently. Absolute value of X is taken.
@@ -57,7 +57,7 @@ Commands available to you are:
   
   
 Octave command line arguments:
-==============================
+------------------------------
 There are several command line arguments you can use to designate your bots, map, modes, and so forth.
 Command line arguments can be added on the command line or in the config file (more on the config file below)
 Arguments:
@@ -76,7 +76,7 @@ Arguments:
 
 
 Config file
-===========
+-----------
 The config file allows you tweak values important to the simulation easily.
 These values include:
 * starting energy
@@ -93,12 +93,12 @@ This file lets you tweak values all in one place, as well as lets the professor 
 
 
 Helper functions
-================
+----------------
 There are some functions the simulation uses that you are welcome to use yourself. None of them are difficult to implement yourself but they are there if you want them.
 * radians = toRadians(degrees) - converts a degree value to radians. (remember octave uses radians for trig functions)
 
 Notes on Graphics program
-=========================
+-------------------------
 * all bots are currently green
 * the red line is your bots direction
 * the black line is the sensors direction
