@@ -11,7 +11,7 @@ There is a degree of randomness from a normal distribution added to each action 
 The bot's only view of the world is through its sole sensor placed at its center that can take a reading of the distance to the nearest object in the direction it is facing.
 The language the user will be programming the bots in is Octave, a GNU version of MATLAB.
 
-- Setup Instructions
+Setup Instructions
 ====================
 
 Example use:
@@ -94,7 +94,8 @@ Helper functions
 There are some functions the simulation uses that you are welcome to use yourself. None of them are difficult to implement yourself but they are there if you want them.
 * radians = toRadians(degrees) - converts a degree value to radians. (remember octave uses radians for trig functions)
 
-- Notes on Graphics program
+Notes on Graphics program
+=========================
 * all bots are currently green
 * the red line is your bots direction
 * the black line is the sensors direction
