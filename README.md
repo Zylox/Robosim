@@ -23,12 +23,12 @@ You will also need to have java runtime environment installed, which many people
 To run:
 -------
 If you can run octave from the command line however you installed it, you run it by navigating to this folder and typing
-	octave Roboloop.m <any command line arguments>
+    octave Roboloop.m <any command line arguments>
 If you jsut have the octave console, you can run it by calling
-	system("XXX")
+    system("XXX")
 where xxx is the above code.
 An example complete exection line might be:
-	octave Roboloop.m  -m starmap.png -b zachbot -debug -rs -norand
+    octave Roboloop.m  -m starmap.png -b zachbot -debug -rs -norand
 Multiple bots can be run at the same time, but there may be an error in this presently. Beware.
 
 
