@@ -1,7 +1,8 @@
 Welcome to the Robotics Simulation Manual!
 ==========================================
-written by Zachary Higginbotham zch5of6@hotmail.com
----------------------------------------------------
+Written by Zachary Higginbotham  
+
+email: zch5of6@hotmail.com
 
 
 Goal Of this Program:
