@@ -9,13 +9,28 @@ Goal Of this Program:
 --------------------
 This program is designed to assist students learning techniques in data fusion and information filtering
 by providing a simulation of virtual robots which they can program using whatever logic for localization they desire and interfacing
-with the simulation using a simple api. Actions, such as moving, turning, reading from a sensor, all take energy, which is a limited resource.
-There is a degree of randomness from a normal distribution added to each action which the user must devise methods to overcome.
+with the simulation using a simple api. Actions, such as moving, turning, reading from a sensor, all take energy, which is a limited resource. Time is also a factor, as there is a limit.
+There is a degree of randomness from a normal distribution added to each action which the user must devise methods to overcome. All of these variables can be changed in the config file.
 The bot's only view of the world is through its sole sensor placed at its center that can take a reading of the distance to the nearest object in the direction it is facing.
 The language the user will be programming the bots in is Octave, a GNU version of MATLAB.
 
 Setup Instructions:
 --------------------
+You will need to install octave. For windows I would recommend using the cygwin package, but http://octave.sourceforge.net/ also has installers for windows and mac.
+For Linux, its a bit more complicated, but can be found by googling.
+You will also need to have java runtime environment installed, which many people probably already do.
+
+To run:
+-------
+If you can run octave from the command line however you installed it, you run it by navigating to this folder and typing
+	octave Roboloop.m <any command line arguments>
+If you jsut have the octave console, you can run it by calling
+	system("XXX")
+where xxx is the above code.
+An example complete exection line might be:
+	octave Roboloop.m  -m starmap.png -b zachbot -debug -rs -norand
+Multiple bots can be run at the same time, but there may be an error in this presently. Beware.
+
 
 Example use:
 ---------------
