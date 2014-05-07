@@ -1,5 +1,7 @@
 Welcome to the Robotics Simulation Manual!
+==========================================
 written by Zachary Higginbotham zch5of6@hotmail.com
+---------------------------------------------------
 
 
 Goal Of this Program:
@@ -11,7 +13,7 @@ There is a degree of randomness from a normal distribution added to each action 
 The bot's only view of the world is through its sole sensor placed at its center that can take a reading of the distance to the nearest object in the direction it is facing.
 The language the user will be programming the bots in is Octave, a GNU version of MATLAB.
 
-Setup Instructions
+Setup Instructions:
 ====================
 
 Example use:
