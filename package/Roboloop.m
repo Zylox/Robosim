@@ -1,4 +1,4 @@
-#!C:\cygwin64\bin\octave -qf
+%!C:\cygwin64\bin\octave -qf
 %!D:\cygwin64\bin\octave -qf
 %!C:\Software\Octave-3.6.4\bin\octave -qf
 
@@ -11,11 +11,11 @@ clear;
 
 %%%loads helper files
 %handles moving and turning of bot
-source("moveturn.m");
+source("src/moveturn.m");
 %all collision detection logic
-source("collision.m");
+source("src/collision.m");
 %handles sensor movement and ray tracing
-source("sensor.m");
+source("src/sensor.m");
 
 %%%global variables 
 %%kept to a minimum
@@ -43,6 +43,7 @@ function [pos,angle] = assignPosAndAng(i, map)
 		pos = [0,0];
 		angle = 0;
 	endif
+
 	
 	
 endfunction
@@ -268,8 +269,8 @@ for(i = offset:argSize)
 		case "-m"							%the map to be read in
 			%initalizing map
 			i++;
-		
-			source(strcat(arguments(i), ".m"));
+			%disp(ccstrcat(arguments(1,i), ".m"));
+			source(cstrcat("maps/",char(arguments(i)), ".m"));
 			map.name = eval(strcat(arguments(i),".name"));
 			map.map = eval(strcat(arguments(i),".map"));
 			map.miniMap = eval(strcat(arguments(i),".miniMap"));
@@ -280,7 +281,7 @@ for(i = offset:argSize)
 		case "-b"							%reads in a bot
 			i++;							%initilizes all the feilds
 			playercount++;
-			source(strcat(arguments(i), ".m"));
+			source(cstrcat("bots/",char(arguments(i)), ".m"));
 			x = eval(strcat(arguments(i),".name"));
 		
 			bots.(x).update = strcat(x, "Update");

@@ -4,9 +4,13 @@ written by Zachary Higginbotham zch5of6@hotmail.com
 
 - Goal Of this Program:
 This program is designed to assist students learning techniques in data fusion and information filtering
-by providing a simulation of virtual robots whith they can program using whatever logic they desire and interfacing
-with the simulation using a simple api.
+by providing a simulation of virtual robots which they can program using whatever logic for localization they desire and interfacing
+with the simulation using a simple api. Actions, such as moving, turning, reading from a sensor, all take energy, which is a limited resource.
+There is a degree of randomness from a normal distribution added to each action which the user must devise methods to overcome.
+The bot's only view of the world is through its sole sensor placed at its center that can take a reading of the distance to the nearest object in the direction it is facing.
+The language the user will be programming the bots in is Octave, a GNU version of MATLAB.
 
+- Setup Instructions
 
 - Example use:
 To program your own robot, you will want to start with the template robot file, which is provided. See that file for specifics.
