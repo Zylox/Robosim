@@ -53,7 +53,7 @@ public class Simulate extends BasicGameState {
 		bots = new ArrayList<Robot>();
 
 		try {
-			scriptRead = new ScriptReader("botscript.txt");
+			scriptRead = new ScriptReader("botScript.txt");
 			botOut = new ScriptReader("botMessages.txt");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
