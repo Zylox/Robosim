@@ -19,6 +19,7 @@ Setup Instructions:
 You will need to install octave. For windows I would recommend using the cygwin package, but http://octave.sourceforge.net/ also has installers for windows and mac.
 For Linux, its a bit more complicated, but can be found by googling.
 You will also need to have java runtime environment installed, which many people probably already do.
+If you end up getting an error about the java not working and you have it installed, try adding java to your system path.
 
 To run:
 -------
