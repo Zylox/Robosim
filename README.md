@@ -9,7 +9,7 @@ Goal Of this Program:
 --------------------
 This program is designed to assist students learning techniques in data fusion and information filtering
 by providing a simulation of virtual robots which they can program using whatever logic for localization they desire and interfacing
-with the simulation using a simple api. Actions, such as moving, turning, reading from a sensor, all take energy, which is a limited resource. Time is also a factor, as there is a limit.
+with the simulation using a simple api. Ultimately, the user will have to keep track of what they think their position is and orientation from their limited info on the enviroment gathered through the sensor. Actions, such as moving, turning, reading from a sensor, all take energy, which is a limited resource. Time is also a factor, as there is a limit.
 There is a degree of randomness from a normal distribution added to each action which the user must devise methods to overcome. All of these variables can be changed in the config file.
 The bot's only view of the world is through its sole sensor placed at its center that can take a reading of the distance to the nearest object in the direction it is facing.
 The language the user will be programming the bots in is Octave, a GNU version of MATLAB.
@@ -62,6 +62,7 @@ Quick things of note:
   
 Commands available to you are:
 ------------------------------
+These commands should all be set during the update function of your robot. They are set in a string called command. This string has to returned before it can execute mind you, it isn't magic.
 * "move X" - This will execute a command to move your bot in your current direction by X units.
 			 Randomness is added at each step.
 			 Limitations: only movement forward is allowed currently. Absolute value of X is taken.
