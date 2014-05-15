@@ -1,9 +1,3 @@
-%!C:\cygwin64\bin\octave -qf
-%!D:\cygwin64\bin\octave -qf
-%!C:\Software\Octave-3.6.4\bin\octave -qf
-
-
-
 clear;
 
 %windows execution
@@ -192,11 +186,26 @@ endfunction
 %runs on unix, pc, or mac
 function runSim()
 	if(isunix())
-		unix("java -jar farjar.jar");
+		unix("java -Djava.library.path=natives -jar farjar.jar");
 	elseif(ispc())
-		dos("java -jar farjar.jar");
+		dos("java -Djava.library.path=natives -jar farjar.jar");
 	elseif(ismac())
-		unix("java -jar farjar.jar");
+		unix("java -Djava.library.path=natives -jar farjar.jar");
+	else
+		disp("Operating System not recognized, good job");
+	endif 
+endfunction
+
+function genMap(mapName)
+	if(isunix())
+	
+		unix(cstrcat("java -jar -Djava.library.path=natives farjar.jar  -genmap ", mapName));
+	elseif(ispc())
+	
+		dos(cstrcat("java -jar -Djava.library.path=natives farjar.jar  -genmap ", mapName));
+	elseif(ismac())
+	
+		unix(cstrcat("java -jar -Djava.library.path=natives farjar.jar  -genmap ", mapName));
 	else
 		disp("Operating System not recognized, good job");
 	endif 
@@ -237,18 +246,23 @@ if(strcmp(arguments{1}, "-c") || strcmp(arguments{1}, "-config"))	%checks whethe
 else										%if not, uses default
 	source("config.m");
 	commandArgs = strsplit(defaultCommandLineArgs, " ");
-			
-	moreArgs = mat2cell(commandArgs, 1);
-	arguments = {arguments{:}, moreArgs{1,1}{:}};	%adds default command line arguments from file
+	if(strcmp(commandArgs,"") != 1)
+		moreArgs = mat2cell(commandArgs, 1);
+		arguments = {arguments{:}, moreArgs{1,1}{:}};	%adds default command line arguments from file if there are any
+	endif
+	
 	
 endif
-
-argSize = size(arguments(1,:));	%complicated access stuff that i dont fully understand
-argSize = argSize(2);			%for some reason this construct is not single dimensional so it has to be accessed like this
+%disp(arguments)
+argSize = size(arguments(:,1));	%complicated access stuff that i dont fully understand
+%disp(argSize)
+argSize = argSize(1);			%for some reason this construct is not single dimensional so it has to be accessed like this
+%disp(argSize)
 for(i = offset:argSize)
 
 	switch(arguments{i})
-		case "-norand"						%sets the randomness to 0
+		case "-norand"					%sets the randomness to 0
+
 			sigma.movementSigma = 0;		%useful for debugging
 			sigma.turningSigma = 0;
 			sigma.turningSensorSigma = 0;
@@ -261,7 +275,11 @@ for(i = offset:argSize)
 	
 		case "-rps"							%Run Previous Simulation
 			runSim();						%will run previously generated script
-			exit();							% should be called solely by itself
+			exit();				% should be called solely by itself
+		
+		case "-genmap"
+			genMap(arguments{i+1})
+			exit();
 			
 		case "-rs"							%run simulation
 			runS = 1;						%will run the graphics when done with simulation
@@ -269,6 +287,7 @@ for(i = offset:argSize)
 		case "-m"							%the map to be read in
 			%initalizing map
 			i++;
+						
 			%disp(ccstrcat(arguments(1,i), ".m"));
 			source(cstrcat("maps/",char(arguments(i)), ".m"));
 			map.name = eval(strcat(arguments(i),".name"));
@@ -281,6 +300,7 @@ for(i = offset:argSize)
 		case "-b"							%reads in a bot
 			i++;							%initilizes all the feilds
 			playercount++;
+
 			source(cstrcat("bots/",char(arguments(i)), ".m"));
 			x = eval(strcat(arguments(i),".name"));
 		

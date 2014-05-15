@@ -14,9 +14,6 @@ public class PictureVConverter {
 
 	public static final int miniMapBlockSize = 50;
 	
-	public static void main(String[] args){
-		
-	}
 	
 	public static void execute(String pictureName){
 		BufferedImage img = null;
@@ -44,7 +41,7 @@ public class PictureVConverter {
 		//String fileDir = imgFile.getParent(); 
 		//String fileDir = "C:\\CygwinScripts";
 		String fileName = bitmapName + ".m";
-		File f = new File (System.getProperty("user.dir") + "/res",fileName);
+		File f = new File (System.getProperty("user.dir") + "/maps",fileName);
 
 		try {
 			writer = new PrintWriter (f);

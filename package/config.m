@@ -23,8 +23,8 @@ perStep.move = 1;
 perStep.turn = 1;
 perStep.sensorTurn = 1;
 
-%%%Simulation time (not real time
-time = 100000;
+%%%Simulation time (not real time)
+time = 10000;
 timeStep = 10;   %% how much time each step represents
 botRadius = 20;	 %% radius of bots
 

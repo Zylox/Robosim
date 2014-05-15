@@ -16,8 +16,20 @@ public class RoboLoopSim extends StateBasedGame {
 
 	
 	public static void main(String[] args) {
-
-		//PictureVConverter.execute("starmap.png");
+		
+		if(args.length != 0){
+			for(int i = 0; i< args.length; i++){
+				System.out.println(args[i]);
+				if(args[i].equalsIgnoreCase("-genmap")){
+					if(i+1 < args.length){
+						PictureVConverter.execute(args[i+1]);
+					}else{
+						System.out.println("note enough arguments");
+					}
+					return;
+				}
+			}
+		}
 		
 		try{
 			AppGameContainer app = new AppGameContainer(new RoboLoopSim("Simulation"));

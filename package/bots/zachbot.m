@@ -10,25 +10,16 @@ function zeroState = zchb93init(zeroState)
 endfunction
 
 function [command, newState] = zchb93Update(oldState, command)
-	%disp("zachworked");
-	%moveBot(5,6,"zchb93");
-	%zchb93Angle = 30;
 	
 	newState = oldState;
-	%disp(newState)
 	
 	if(mod(newState.moveCounter,2) == 0)
 		command = "turn 2";
-		newState.output = "turning 1";
+		newState.output = "turning 2";
 		newState.moveCounter = 0;
-	% elseif(mod(newState.moveCounter,4) == 1)
-		% command = "move 10";
-		% newState.output = "senso";
-	% elseif(mod(newState.moveCounter,4) == 2)
-		% command = "sense";
-		% newState.output = "voodoo sensing powers";
 	else
 		command = "move 10";
+		newState.output = "moving 10";
 
 	endif
 	newState.moveCounter +=1;
