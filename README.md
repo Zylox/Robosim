@@ -2,8 +2,6 @@ How To Use:
 ------------------------------------------
 Written by Zachary Higginbotham  
 
-email: zch5of6@hotmail.com
-
 
 Goal Of this Program:
 --------------------
